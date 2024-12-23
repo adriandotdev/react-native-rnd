@@ -12,6 +12,9 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
+import { useNavigation } from "@react-navigation/native";
+
+const PRIMARY_COLOR = "#ab39c6";
 
 const LoginScreen = () => {
 	const [loaded, error] = useFonts({
@@ -22,6 +25,7 @@ const LoginScreen = () => {
 	});
 	const [username, setUsername] = useState(() => "");
 	const [password, setPassword] = useState(() => "");
+	const navigation = useNavigation();
 
 	if (!loaded) {
 		return (
@@ -36,7 +40,7 @@ const LoginScreen = () => {
 			style={styles.main}
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
 		>
-			<Text style={styles.title}>Charge N' Go</Text>
+			<Text style={styles.title}>FlashCards</Text>
 			<View>
 				<Text style={styles.usernameLabel}>Username</Text>
 				<TextInput
@@ -64,7 +68,7 @@ const LoginScreen = () => {
 			<TouchableOpacity
 				style={styles.loginButton}
 				onPress={() => {
-					navigation.navigate("Login");
+					navigation.navigate("Flashcards");
 				}}
 			>
 				<View>
@@ -95,6 +99,7 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		textAlign: "center",
 		fontFamily: "PoppinsBold",
+		color: PRIMARY_COLOR,
 	},
 	usernameContainer: {},
 	username: {
@@ -111,14 +116,13 @@ const styles = StyleSheet.create({
 		marginHorizontal: 11,
 	},
 	loginButton: {
-		backgroundColor: "#052024",
+		backgroundColor: PRIMARY_COLOR,
 		zIndex: 2,
 		borderRadius: 50,
 		marginHorizontal: 11,
 	},
 	loginButtonText: {
-		fontWeight: "bold",
-		fontFamily: "Helvetica",
+		fontFamily: "PoppinsBold",
 		fontSize: 16,
 		textAlign: "center",
 		padding: 20,
@@ -137,5 +141,6 @@ const styles = StyleSheet.create({
 	footerText2: {
 		fontFamily: "PoppinsBold",
 		fontSize: 16,
+		color: PRIMARY_COLOR,
 	},
 });

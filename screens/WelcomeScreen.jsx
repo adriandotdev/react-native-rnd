@@ -33,7 +33,7 @@ function WelcomeScreen() {
 		<>
 			<ImageBackground
 				style={styles.background}
-				source={require("../assets/smart-me-ag-j2E-2YQe_c8-unsplash (1).jpg")}
+				source={require("../assets/pexels-pavel-danilyuk-8422134.jpg")}
 			>
 				<View>
 					<Text
@@ -42,6 +42,7 @@ function WelcomeScreen() {
 							fontSize: 40,
 							fontFamily: "PoppinsBold",
 							textAlign: "center",
+							color: "white",
 						}}
 					>
 						FlashYourCards
@@ -52,6 +53,7 @@ function WelcomeScreen() {
 							fontSize: 15,
 							fontFamily: "PoppinsBold",
 							textAlign: "center",
+							color: "white",
 						}}
 					>
 						Everything with your own cards
@@ -99,14 +101,13 @@ const styles = StyleSheet.create({
 		gap: 15,
 	},
 	loginButton: {
-		backgroundColor: "#052024",
+		backgroundColor: "#ab39c6",
 		width: "80%",
 		zIndex: 2,
 		borderRadius: 50,
 	},
 	loginButtonText: {
-		fontWeight: "bold",
-		fontFamily: "Helvetica",
+		fontFamily: "PoppinsBold",
 		fontSize: 16,
 		textAlign: "center",
 		padding: 20,
@@ -119,21 +120,20 @@ const styles = StyleSheet.create({
 		borderRadius: 50,
 	},
 	signupButtonText: {
-		fontWeight: "bold",
-		fontFamily: "Helvetica",
+		fontFamily: "PoppinsBold",
 		fontSize: 16,
 		textAlign: "center",
 		padding: 20,
-		color: "black",
+		color: "#ab39c6",
 	},
 	backgroundDrop: {
 		flex: 1,
 		position: "absolute",
-		backgroundColor: "#ccc",
+		backgroundColor: "#1f1f1f",
 		top: 0,
 		left: 0,
 		right: 0,
 		bottom: 0,
-		opacity: 0.5,
+		opacity: 0.7,
 	},
 });

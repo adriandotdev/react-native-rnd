@@ -3,17 +3,18 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./screens/LoginScreen";
+import Flashcards from "./screens/Flashcards";
 
 const RootStack = createNativeStackNavigator({
 	initialRouteName: "Home",
 	screenOptions: {
-		headerStyle: { backgroundColor: "#052024" },
+		headerStyle: { backgroundColor: "white" },
 		headerTitleStyle: {
-			color: "white",
+			color: "black",
 			fontWeight: "bold",
 			fontFamily: "Poppins",
 		},
-		headerTintColor: "white",
+		headerTintColor: "black",
 	},
 	screens: {
 		Home: {
@@ -21,6 +22,9 @@ const RootStack = createNativeStackNavigator({
 		},
 		Login: {
 			screen: LoginScreen,
+		},
+		Flashcards: {
+			screen: Flashcards,
 		},
 	},
 });
