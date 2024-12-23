@@ -6,11 +6,9 @@ import {
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Platform,
-	Pressable,
-	TouchableHighlight,
 } from "react-native";
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 
@@ -93,7 +91,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "stretch",
 		justifyContent: "center",
-		gap: 7,
+		gap: 15,
+		paddingHorizontal: 15,
 	},
 	title: {
 		fontSize: 32,
@@ -104,22 +103,19 @@ const styles = StyleSheet.create({
 	usernameContainer: {},
 	username: {
 		height: 50,
-		margin: 12,
 		borderWidth: 1,
 		padding: 10,
 		borderRadius: 8,
 		fontFamily: "PoppinsRegular",
 	},
 	usernameLabel: {
-		fontFamily: "PoppinsMedium",
+		fontFamily: "PoppinsBold",
 		fontSize: 16,
-		marginHorizontal: 11,
 	},
 	loginButton: {
 		backgroundColor: PRIMARY_COLOR,
 		zIndex: 2,
 		borderRadius: 50,
-		marginHorizontal: 11,
 	},
 	loginButtonText: {
 		fontFamily: "PoppinsBold",
@@ -129,7 +125,6 @@ const styles = StyleSheet.create({
 		color: "white",
 	},
 	footerView: {
-		padding: 16,
 		flexDirection: "row",
 		justifyContent: "center",
 		gap: 5,
