@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
 		fontFamily: "PoppinsBold",
 		fontSize: 16,
 		textAlign: "center",
-		padding: 20,
+		paddingVertical: 15,
 		color: "white",
 	},
 	footerView: {
