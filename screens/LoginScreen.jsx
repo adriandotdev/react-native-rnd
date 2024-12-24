@@ -11,6 +11,7 @@ import React, { useState } from "react";
 
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
+import { SignInContext } from "../contexts/SignInContext";
 
 const PRIMARY_COLOR = "#ab39c6";
 
@@ -21,9 +22,10 @@ const LoginScreen = () => {
 		PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
 		PoppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
 	});
+	const { dispatch } = React.useContext(SignInContext);
+
 	const [username, setUsername] = useState(() => "");
 	const [password, setPassword] = useState(() => "");
-	const navigation = useNavigation();
 
 	if (!loaded) {
 		return (
@@ -66,7 +68,7 @@ const LoginScreen = () => {
 			<TouchableOpacity
 				style={styles.loginButton}
 				onPress={() => {
-					navigation.navigate("Flashcards");
+					dispatch({ type: "LOGIN", payload: { user: { username } } });
 				}}
 			>
 				<View>
