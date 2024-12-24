@@ -8,10 +8,13 @@ import {
 	Modal,
 	TouchableWithoutFeedback,
 	Dimensions,
+	Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
+import { useNavigation } from "@react-navigation/native";
+import { SignInContext } from "../contexts/SignInContext";
 
 const PRIMARY_COLOR = "#ab39c6";
 const CURRENT_HEIGHT = Dimensions.get("window").height;
@@ -31,6 +34,8 @@ const Flashcards = () => {
 		PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
 		PoppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
 	});
+
+	const { dispatch } = useContext(SignInContext);
 
 	const [flashcards, setFlashcards] = useState([
 		{
@@ -121,6 +126,51 @@ const Flashcards = () => {
 		},
 	]);
 	const [modalVisible, setModalVisible] = useState(false);
+
+	const navigation = useNavigation();
+
+	useEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<TouchableOpacity
+					onPress={() =>
+						Alert.alert(
+							"Logout",
+							"Are you sure you want to logout?",
+							[
+								{
+									text: "Yes",
+									onPress: () => dispatch({ type: "LOGOUT" }),
+									style: "default",
+								},
+								{
+									text: "Cancel",
+									onPress: () => console.log("Cancel"),
+									style: "cancel",
+								},
+							],
+							{
+								cancelable: true,
+								onDismiss: () => console.log("Dismiss"),
+							}
+						)
+					}
+				>
+					<View style={{ paddingHorizontal: 15 }}>
+						<Text
+							style={{
+								color: "red",
+								fontFamily: "PoppinsMedium",
+								textAlign: "center",
+							}}
+						>
+							Logout
+						</Text>
+					</View>
+				</TouchableOpacity>
+			),
+		});
+	}, [navigation]);
 
 	return (
 		<SafeAreaProvider>
@@ -215,10 +265,10 @@ const styles = StyleSheet.create({
 		shadowColor: "#000", // Shadow color
 		shadowOffset: { width: 0, height: 25 },
 		shadowOpacity: 1, // Shadow opacity
-		shadowRadius: 252, // Shadow blur radius
+		shadowRadius: 1, // Shadow blur radius
 		elevation: 5,
 		borderRadius: 15,
-		paddingVertical: 25,
+		paddingTop: 25,
 		paddingHorizontal: 15,
 		gap: 15,
 	},
@@ -237,7 +287,6 @@ const styles = StyleSheet.create({
 	addCategoryButton: {
 		backgroundColor: PRIMARY_COLOR,
 		borderRadius: 50,
-		marginTop: 15,
 	},
 	addCategoryButtonText: {
 		fontFamily: "PoppinsBold",

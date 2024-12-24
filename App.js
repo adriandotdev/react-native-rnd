@@ -1,21 +1,45 @@
-import { useDeviceOrientation } from "@react-native-community/hooks";
+// import { useDeviceOrientation } from "@react-native-community/hooks";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginScreen from "./screens/LoginScreen";
 import Flashcards from "./screens/Flashcards";
-import { Button } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import React from "react";
+import { SignInContext, SignInProvider } from "./contexts/SignInContext";
 
 const ProfileTabs = createBottomTabNavigator({
 	screens: {
-		Flashcards: Flashcards,
+		Flashcards: {
+			screen: Flashcards,
+			options: {
+				headerRight: () => (
+					<TouchableOpacity>
+						<View style={{ paddingHorizontal: 15 }}>
+							<Text
+								style={{
+									color: "red",
+									fontFamily: "PoppinsMedium",
+									textAlign: "center",
+								}}
+							>
+								Logout
+							</Text>
+						</View>
+					</TouchableOpacity>
+				),
+				tabBarStyle: {
+					borderRadius: 15,
+				},
+			},
+		},
 		Profile: Flashcards,
 	},
 });
 
 const RootStack = createNativeStackNavigator({
-	initialRouteName: "Home",
+	// initialRouteName: "Home",
 	screenOptions: {
 		headerStyle: { backgroundColor: "white" },
 		headerTitleStyle: {
@@ -24,22 +48,24 @@ const RootStack = createNativeStackNavigator({
 			fontFamily: "Poppins",
 		},
 		headerTintColor: "black",
-		headerLeft: () => <></>,
 	},
 	screens: {
 		Home: {
+			if: useIsSignedOut,
 			screen: WelcomeScreen,
 			options: {
 				headerShown: false,
 			},
 		},
 		Login: {
+			if: useIsSignedOut,
 			screen: LoginScreen,
 			options: {
 				headerShown: false,
 			},
 		},
 		Flashcards: {
+			if: useIsSignedIn,
 			screen: ProfileTabs,
 			options: {
 				headerShown: false,
@@ -50,8 +76,23 @@ const RootStack = createNativeStackNavigator({
 
 const Navigation = createStaticNavigation(RootStack);
 
-export default function App() {
-	console.log(useDeviceOrientation());
+// Hooks
+function useIsSignedIn() {
+	const { state } = React.useContext(SignInContext);
 
-	return <Navigation />;
+	return state.isAuthenticated;
+}
+
+function useIsSignedOut() {
+	const { state } = React.useContext(SignInContext);
+	return !state.isAuthenticated;
+}
+// End of Hooks Region
+
+export default function App() {
+	return (
+		<SignInProvider>
+			<Navigation />
+		</SignInProvider>
+	);
 }

@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Platform,
+	ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -73,6 +74,11 @@ const LoginScreen = () => {
 			>
 				<View>
 					<Text style={styles.loginButtonText}>Login</Text>
+					{/* <ActivityIndicator
+						style={styles.loginButtonText}
+						size="small"
+						color="white"
+					/> */}
 				</View>
 			</TouchableOpacity>
 

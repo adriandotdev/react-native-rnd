@@ -13,6 +13,8 @@ const reducer = (state, action) => {
 	switch (type) {
 		case "LOGIN":
 			return { ...state, user: payload.user, isAuthenticated: true };
+		case "LOGOUT":
+			return { ...state, user: null, isAuthenticated: false };
 	}
 };
 
