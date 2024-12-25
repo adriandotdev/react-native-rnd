@@ -22,7 +22,7 @@ import { SignInContext } from "../contexts/SignInContext";
 import axios from "axios";
 
 const PRIMARY_COLOR = "#ab39c6";
-const URL = Constants.manifest2.extra.apiUrl;
+const URL = process.env.EXPO_PUBLIC_API_URL;
 
 const LoginScreen = () => {
 	const {
@@ -70,7 +70,7 @@ const LoginScreen = () => {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView>
+			<SafeAreaView style={{ flexGrow: 1 }}>
 				<KeyboardAvoidingView
 					style={styles.main}
 					behavior={Platform.OS === "ios" ? "padding" : "height"}

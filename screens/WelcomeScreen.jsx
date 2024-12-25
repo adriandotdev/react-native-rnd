@@ -1,5 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
-import { useFonts } from "expo-font";
 import React from "react";
 import {
 	ImageBackground,
@@ -7,10 +5,10 @@ import {
 	View,
 	Text,
 	TouchableOpacity,
-	SafeAreaView,
-	StatusBar,
-	Platform,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 function WelcomeScreen() {
 	const [loaded, error] = useFonts({
@@ -31,56 +29,60 @@ function WelcomeScreen() {
 
 	return (
 		<>
-			<ImageBackground
-				style={styles.background}
-				source={require("../assets/pexels-pavel-danilyuk-8422134.jpg")}
-			>
-				<View>
-					<Text
-						style={{
-							zIndex: 2,
-							fontSize: 40,
-							fontFamily: "PoppinsBold",
-							textAlign: "center",
-							color: "white",
-						}}
-					>
-						FlashYourCards
-					</Text>
-					<Text
-						style={{
-							zIndex: 2,
-							fontSize: 15,
-							fontFamily: "PoppinsBold",
-							textAlign: "center",
-							color: "white",
-						}}
-					>
-						Everything with your own cards
-					</Text>
-				</View>
-				<View style={styles.buttonContainer}>
-					<TouchableOpacity
-						style={styles.loginButton}
-						onPress={() => {
-							navigation.navigate("Login");
-						}}
+			<SafeAreaProvider>
+				<SafeAreaView style={{ flexGrow: 1 }}>
+					<ImageBackground
+						style={styles.background}
+						source={require("../assets/pexels-pavel-danilyuk-8422134.jpg")}
 					>
 						<View>
-							<Text style={styles.loginButtonText}>Login</Text>
+							<Text
+								style={{
+									zIndex: 2,
+									fontSize: 40,
+									fontFamily: "PoppinsBold",
+									textAlign: "center",
+									color: "white",
+								}}
+							>
+								Yan-Yan's Store
+							</Text>
+							<Text
+								style={{
+									zIndex: 2,
+									fontSize: 15,
+									fontFamily: "PoppinsBold",
+									textAlign: "center",
+									color: "white",
+								}}
+							>
+								Product Management System
+							</Text>
 						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.signupButton}
-						onPress={() => navigation.navigate("SignUp")}
-					>
-						<View>
-							<Text style={styles.signupButtonText}>Sign Up</Text>
+						<View style={styles.buttonContainer}>
+							<TouchableOpacity
+								style={styles.loginButton}
+								onPress={() => {
+									navigation.navigate("Login");
+								}}
+							>
+								<View>
+									<Text style={styles.loginButtonText}>Login</Text>
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={styles.signupButton}
+								onPress={() => navigation.navigate("SignUp")}
+							>
+								<View>
+									<Text style={styles.signupButtonText}>Sign Up</Text>
+								</View>
+							</TouchableOpacity>
 						</View>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.backgroundDrop}></View>
-			</ImageBackground>
+						<View style={styles.backgroundDrop}></View>
+					</ImageBackground>
+				</SafeAreaView>
+			</SafeAreaProvider>
 		</>
 	);
 }
