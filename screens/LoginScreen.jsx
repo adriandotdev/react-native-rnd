@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Constants from "expo-constants";
 
 import {
@@ -29,6 +29,7 @@ const LoginScreen = () => {
 		control,
 		handleSubmit,
 		formState: { errors, isSubmitting },
+		setValue,
 	} = useForm({
 		defaultValues: {
 			username: "",
@@ -68,6 +69,11 @@ const LoginScreen = () => {
 		}
 	};
 
+	// For testing purposes
+	useEffect(() => {
+		setValue("username", "username");
+		setValue("password", "password");
+	}, []);
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={{ flexGrow: 1 }}>

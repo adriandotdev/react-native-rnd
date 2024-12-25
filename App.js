@@ -4,7 +4,7 @@ import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginScreen from "./screens/LoginScreen";
-import Flashcards from "./screens/Flashcards";
+import Products from "././screens/Products";
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { SignInContext, SignInProvider } from "./contexts/SignInContext";
@@ -12,8 +12,8 @@ import SignUpScreen from "./screens/SignUpScreen";
 
 const ProfileTabs = createBottomTabNavigator({
 	screens: {
-		Flashcards: {
-			screen: Flashcards,
+		Products: {
+			screen: Products,
 			options: {
 				headerRight: () => (
 					<TouchableOpacity>
@@ -35,7 +35,7 @@ const ProfileTabs = createBottomTabNavigator({
 				},
 			},
 		},
-		Profile: Flashcards,
+		Profile: Products,
 	},
 });
 
