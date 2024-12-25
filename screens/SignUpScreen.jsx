@@ -8,12 +8,14 @@ import {
 	TouchableOpacity,
 	ActivityIndicator,
 	ScrollView,
+	BackHandler,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { useForm, Controller } from "react-hook-form";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const PRIMARY_COLOR = "#ab39c6";
 const URL = "https://9275-203-189-118-82.ngrok-free.app";
@@ -32,7 +34,7 @@ const SignUpScreen = () => {
 			confirm_password: "",
 		},
 	});
-
+	const navigation = useNavigation();
 	const [loaded, error] = useFonts({
 		PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
 		PoppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
@@ -45,6 +47,19 @@ const SignUpScreen = () => {
 	};
 
 	const password = watch("password");
+
+	useEffect(() => {
+		const backHandler = BackHandler.addEventListener(
+			"hardwareBackPress",
+			() => {
+				navigation.navigate("Home");
+
+				return true;
+			}
+		);
+
+		return () => backHandler.remove();
+	}, []);
 
 	return (
 		<SafeAreaProvider>
@@ -189,7 +204,7 @@ const SignUpScreen = () => {
 
 						<View style={styles.footerView}>
 							<Text style={styles.footerText1}>Already have an account?</Text>
-							<TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+							<TouchableOpacity onPress={() => navigation.navigate("Login")}>
 								<Text style={styles.footerText2}>Sign In</Text>
 							</TouchableOpacity>
 						</View>

@@ -169,7 +169,8 @@ const styles = StyleSheet.create({
 	usernameContainer: {},
 	textInput: {
 		height: 50,
-		borderWidth: 1,
+		borderWidth: 0.5,
+		borderColor: "#ccc",
 		padding: 10,
 		borderRadius: 8,
 		fontFamily: "PoppinsRegular",
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
 		backgroundColor: PRIMARY_COLOR,
 		zIndex: 2,
 		borderRadius: 50,
+		marginTop: 15,
 	},
 	loginButtonText: {
 		fontFamily: "PoppinsBold",
