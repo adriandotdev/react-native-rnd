@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -10,15 +11,15 @@ import {
 	ScrollView,
 	BackHandler,
 } from "react-native";
-import React, { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { useForm, Controller } from "react-hook-form";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import Constants from "expo-constants";
 import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
 
 const PRIMARY_COLOR = "#ab39c6";
-const URL = "https://9275-203-189-118-82.ngrok-free.app";
+const URL = Constants.manifest2.extra.apiUrl;
 
 const SignUpScreen = () => {
 	const {

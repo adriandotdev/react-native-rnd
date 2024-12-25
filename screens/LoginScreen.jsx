@@ -1,3 +1,6 @@
+import React from "react";
+import Constants from "expo-constants";
+
 import {
 	View,
 	Text,
@@ -7,19 +10,19 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	ActivityIndicator,
-	SafeAreaView,
 } from "react-native";
-import React, { useState } from "react";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
-import { SignInContext } from "../contexts/SignInContext";
 import { useForm, Controller } from "react-hook-form";
+
+import { SignInContext } from "../contexts/SignInContext";
 
 import axios from "axios";
 
 const PRIMARY_COLOR = "#ab39c6";
-const URL = "https://9275-203-189-118-82.ngrok-free.app";
+const URL = Constants.manifest2.extra.apiUrl;
 
 const LoginScreen = () => {
 	const {
@@ -66,86 +69,94 @@ const LoginScreen = () => {
 	};
 
 	return (
-		<KeyboardAvoidingView
-			style={styles.main}
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-		>
-			<Text style={styles.title}>FlashCards</Text>
+		<SafeAreaProvider>
+			<SafeAreaView>
+				<KeyboardAvoidingView
+					style={styles.main}
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+				>
+					<Text style={styles.title}>FlashCards</Text>
 
-			<View>
-				<Text style={styles.textInputLabel}>Username</Text>
-				<Controller
-					control={control}
-					rules={{ required: "Please provide your username" }}
-					render={({ field: { onChange, onBlur, value } }) => (
-						<TextInput
-							style={errors.username ? styles.textInputError : styles.textInput}
-							placeholder="Enter your username"
-							onBlur={onBlur}
-							onChangeText={onChange}
-							value={value}
-						/>
-					)}
-					name="username"
-				/>
-				{errors?.username && (
 					<View>
-						<Text style={styles.formErrorMessage}>
-							{errors.username.message}
-						</Text>
-					</View>
-				)}
-			</View>
-			<View>
-				<Text style={styles.textInputLabel}>Password</Text>
-				<Controller
-					control={control}
-					rules={{ required: "Please provide your password" }}
-					render={({ field: { onChange, onBlur, value } }) => (
-						<TextInput
-							style={errors.password ? styles.textInputError : styles.textInput}
-							placeholder="Enter your password"
-							secureTextEntry={true}
-							onBlur={onBlur}
-							onChangeText={onChange}
-							value={value}
+						<Text style={styles.textInputLabel}>Username</Text>
+						<Controller
+							control={control}
+							rules={{ required: "Please provide your username" }}
+							render={({ field: { onChange, onBlur, value } }) => (
+								<TextInput
+									style={
+										errors.username ? styles.textInputError : styles.textInput
+									}
+									placeholder="Enter your username"
+									onBlur={onBlur}
+									onChangeText={onChange}
+									value={value}
+								/>
+							)}
+							name="username"
 						/>
-					)}
-					name="password"
-				/>
-				{errors?.password && (
+						{errors?.username && (
+							<View>
+								<Text style={styles.formErrorMessage}>
+									{errors.username.message}
+								</Text>
+							</View>
+						)}
+					</View>
 					<View>
-						<Text style={styles.formErrorMessage}>
-							{errors.password.message}
-						</Text>
-					</View>
-				)}
-			</View>
-
-			<TouchableOpacity
-				style={styles.loginButton}
-				onPress={handleSubmit(onSubmit)}
-			>
-				<View>
-					{isSubmitting ? (
-						<ActivityIndicator
-							style={styles.loginButtonText}
-							size="small"
-							color="white"
+						<Text style={styles.textInputLabel}>Password</Text>
+						<Controller
+							control={control}
+							rules={{ required: "Please provide your password" }}
+							render={({ field: { onChange, onBlur, value } }) => (
+								<TextInput
+									style={
+										errors.password ? styles.textInputError : styles.textInput
+									}
+									placeholder="Enter your password"
+									secureTextEntry={true}
+									onBlur={onBlur}
+									onChangeText={onChange}
+									value={value}
+								/>
+							)}
+							name="password"
 						/>
-					) : (
-						<Text style={styles.loginButtonText}>Login</Text>
-					)}
-				</View>
-			</TouchableOpacity>
+						{errors?.password && (
+							<View>
+								<Text style={styles.formErrorMessage}>
+									{errors.password.message}
+								</Text>
+							</View>
+						)}
+					</View>
 
-			<View style={styles.footerView}>
-				<Text style={styles.footerText1}>Don't have an account yet?</Text>
-				<TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-					<Text style={styles.footerText2}>Sign Up</Text>
-				</TouchableOpacity>
-			</View>
-		</KeyboardAvoidingView>
+					<TouchableOpacity
+						style={styles.loginButton}
+						onPress={handleSubmit(onSubmit)}
+					>
+						<View>
+							{isSubmitting ? (
+								<ActivityIndicator
+									style={styles.loginButtonText}
+									size="small"
+									color="white"
+								/>
+							) : (
+								<Text style={styles.loginButtonText}>Login</Text>
+							)}
+						</View>
+					</TouchableOpacity>
+
+					<View style={styles.footerView}>
+						<Text style={styles.footerText1}>Don't have an account yet?</Text>
+						<TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+							<Text style={styles.footerText2}>Sign Up</Text>
+						</TouchableOpacity>
+					</View>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 };
 
