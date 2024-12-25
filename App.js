@@ -8,6 +8,7 @@ import Flashcards from "./screens/Flashcards";
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { SignInContext, SignInProvider } from "./contexts/SignInContext";
+import SignUpScreen from "./screens/SignUpScreen";
 
 const ProfileTabs = createBottomTabNavigator({
 	screens: {
@@ -60,6 +61,13 @@ const RootStack = createNativeStackNavigator({
 		Login: {
 			if: useIsSignedOut,
 			screen: LoginScreen,
+			options: {
+				headerShown: false,
+			},
+		},
+		SignUp: {
+			if: useIsSignedOut,
+			screen: SignUpScreen,
 			options: {
 				headerShown: false,
 			},

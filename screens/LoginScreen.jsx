@@ -7,6 +7,7 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	ActivityIndicator,
+	SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -15,20 +16,23 @@ import { useNavigation } from "@react-navigation/native";
 import { SignInContext } from "../contexts/SignInContext";
 import { useForm, Controller } from "react-hook-form";
 
+import axios from "axios";
+
 const PRIMARY_COLOR = "#ab39c6";
+const URL = "https://9275-203-189-118-82.ngrok-free.app";
 
 const LoginScreen = () => {
 	const {
 		control,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm({
 		defaultValues: {
 			username: "",
 			password: "",
 		},
 	});
-
+	const navigation = useNavigation();
 	const [loaded, error] = useFonts({
 		PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
 		PoppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
@@ -36,9 +40,6 @@ const LoginScreen = () => {
 		PoppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
 	});
 	const { dispatch } = React.useContext(SignInContext);
-
-	const [username, setUsername] = useState(() => "");
-	const [password, setPassword] = useState(() => "");
 
 	if (!loaded) {
 		return (
@@ -48,8 +49,20 @@ const LoginScreen = () => {
 		);
 	}
 
-	const onSubmit = (data) => {
-		dispatch({ type: "LOGIN", payload: { user: { username: data.username } } });
+	const onSubmit = async (data) => {
+		try {
+			const response = await axios.post(`${URL}/api/v1/auth/login`, {
+				username: data.username,
+				password: data.password,
+			});
+
+			dispatch({
+				type: "LOGIN",
+				payload: { user: { username: data.username } },
+			});
+		} catch (err) {
+			console.log(err.response.data);
+		}
 	};
 
 	return (
@@ -58,6 +71,7 @@ const LoginScreen = () => {
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
 		>
 			<Text style={styles.title}>FlashCards</Text>
+
 			<View>
 				<Text style={styles.textInputLabel}>Username</Text>
 				<Controller
@@ -113,18 +127,21 @@ const LoginScreen = () => {
 				onPress={handleSubmit(onSubmit)}
 			>
 				<View>
-					<Text style={styles.loginButtonText}>Login</Text>
-					{/* <ActivityIndicator
-						style={styles.loginButtonText}
-						size="small"
-						color="white"
-					/> */}
+					{isSubmitting ? (
+						<ActivityIndicator
+							style={styles.loginButtonText}
+							size="small"
+							color="white"
+						/>
+					) : (
+						<Text style={styles.loginButtonText}>Login</Text>
+					)}
 				</View>
 			</TouchableOpacity>
 
 			<View style={styles.footerView}>
 				<Text style={styles.footerText1}>Don't have an account yet?</Text>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
 					<Text style={styles.footerText2}>Sign Up</Text>
 				</TouchableOpacity>
 			</View>
@@ -142,6 +159,7 @@ const styles = StyleSheet.create({
 		gap: 15,
 		paddingHorizontal: 15,
 	},
+
 	title: {
 		fontSize: 32,
 		textAlign: "center",

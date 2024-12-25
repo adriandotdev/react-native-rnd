@@ -72,7 +72,7 @@ function WelcomeScreen() {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.signupButton}
-						onPress={() => console.log("Login")}
+						onPress={() => navigation.navigate("SignUp")}
 					>
 						<View>
 							<Text style={styles.signupButtonText}>Sign Up</Text>

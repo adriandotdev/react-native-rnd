@@ -37,6 +37,7 @@
 					"fonts": ["./assets/fonts/Poppins-Bold.ttf"]
 				}
 			]
-		]
+		],
+		"permissions": ["android.permission.INTERNET"]
 	}
 }
