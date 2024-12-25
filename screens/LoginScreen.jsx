@@ -13,10 +13,22 @@ import React, { useState } from "react";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import { SignInContext } from "../contexts/SignInContext";
+import { useForm, Controller } from "react-hook-form";
 
 const PRIMARY_COLOR = "#ab39c6";
 
 const LoginScreen = () => {
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			username: "",
+			password: "",
+		},
+	});
+
 	const [loaded, error] = useFonts({
 		PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
 		PoppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
@@ -36,6 +48,10 @@ const LoginScreen = () => {
 		);
 	}
 
+	const onSubmit = (data) => {
+		dispatch({ type: "LOGIN", payload: { user: { username: data.username } } });
+	};
+
 	return (
 		<KeyboardAvoidingView
 			style={styles.main}
@@ -43,34 +59,58 @@ const LoginScreen = () => {
 		>
 			<Text style={styles.title}>FlashCards</Text>
 			<View>
-				<Text style={styles.usernameLabel}>Username</Text>
-				<TextInput
-					style={styles.username}
-					value={username}
-					placeholder="Enter your username"
-					onChangeText={(value) => {
-						setUsername(value);
-					}}
+				<Text style={styles.textInputLabel}>Username</Text>
+				<Controller
+					control={control}
+					rules={{ required: "Please provide your username" }}
+					render={({ field: { onChange, onBlur, value } }) => (
+						<TextInput
+							style={errors.username ? styles.textInputError : styles.textInput}
+							placeholder="Enter your username"
+							onBlur={onBlur}
+							onChangeText={onChange}
+							value={value}
+						/>
+					)}
+					name="username"
 				/>
+				{errors?.username && (
+					<View>
+						<Text style={styles.formErrorMessage}>
+							{errors.username.message}
+						</Text>
+					</View>
+				)}
 			</View>
 			<View>
-				<Text style={styles.usernameLabel}>Password</Text>
-				<TextInput
-					style={styles.username}
-					value={password}
-					placeholder="Enter your password"
-					secureTextEntry={true}
-					onChangeText={(value) => {
-						setPassword(value);
-					}}
+				<Text style={styles.textInputLabel}>Password</Text>
+				<Controller
+					control={control}
+					rules={{ required: "Please provide your password" }}
+					render={({ field: { onChange, onBlur, value } }) => (
+						<TextInput
+							style={errors.password ? styles.textInputError : styles.textInput}
+							placeholder="Enter your password"
+							secureTextEntry={true}
+							onBlur={onBlur}
+							onChangeText={onChange}
+							value={value}
+						/>
+					)}
+					name="password"
 				/>
+				{errors?.password && (
+					<View>
+						<Text style={styles.formErrorMessage}>
+							{errors.password.message}
+						</Text>
+					</View>
+				)}
 			</View>
 
 			<TouchableOpacity
 				style={styles.loginButton}
-				onPress={() => {
-					dispatch({ type: "LOGIN", payload: { user: { username } } });
-				}}
+				onPress={handleSubmit(onSubmit)}
 			>
 				<View>
 					<Text style={styles.loginButtonText}>Login</Text>
@@ -109,14 +149,22 @@ const styles = StyleSheet.create({
 		color: PRIMARY_COLOR,
 	},
 	usernameContainer: {},
-	username: {
+	textInput: {
 		height: 50,
 		borderWidth: 1,
 		padding: 10,
 		borderRadius: 8,
 		fontFamily: "PoppinsRegular",
 	},
-	usernameLabel: {
+	textInputError: {
+		height: 50,
+		borderWidth: 1,
+		padding: 10,
+		borderRadius: 8,
+		fontFamily: "PoppinsRegular",
+		borderColor: "red",
+	},
+	textInputLabel: {
 		fontFamily: "PoppinsBold",
 		fontSize: 16,
 	},
@@ -145,5 +193,9 @@ const styles = StyleSheet.create({
 		fontFamily: "PoppinsBold",
 		fontSize: 16,
 		color: PRIMARY_COLOR,
+	},
+	formErrorMessage: {
+		color: "red",
+		fontFamily: "PoppinsMedium",
 	},
 });
