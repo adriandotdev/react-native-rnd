@@ -1,43 +1,53 @@
 {
-	"expo": {
-		"name": "firstreactnative",
-		"slug": "firstreactnative",
-		"version": "1.0.0",
-		"orientation": "default",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "light",
-		"newArchEnabled": true,
-		"splash": {
-			"image": "./assets/splash-icon.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"ios": {
-			"supportsTablet": true
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			}
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
-		},
-		"plugins": [
-			[
-				"expo-sensors",
-				{
-					"motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
-				}
-			],
-			[
-				"expo-font",
-				{
-					"fonts": ["./assets/fonts/Poppins-Bold.ttf"]
-				}
-			]
-		],
-		"permissions": ["android.permission.INTERNET"]
-	}
+  "expo": {
+    "name": "YanYan Store: PMS",
+    "slug": "YanYanStore-PMS",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "yanyanstore.sampleapp",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Poppins-Bold.ttf"
+          ]
+        }
+      ]
+    ],
+    "updates": {
+      "url": "http://localhost:3000/api/manifest"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "db5514e2-c066-42fd-94e5-cd377dc4af0a"
+      }
+    }
+  }
 }

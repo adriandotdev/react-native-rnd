@@ -9,6 +9,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { SignInContext, SignInProvider } from "./contexts/SignInContext";
 import SignUpScreen from "./screens/SignUpScreen";
+import { ProductProvider } from "./contexts/ProductContext";
 
 const ProfileTabs = createBottomTabNavigator({
 	screens: {
@@ -100,7 +101,9 @@ function useIsSignedOut() {
 export default function App() {
 	return (
 		<SignInProvider>
-			<Navigation />
+			<ProductProvider>
+				<Navigation />
+			</ProductProvider>
 		</SignInProvider>
 	);
 }

@@ -12,6 +12,7 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	ScrollView,
+	ActivityIndicator,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -19,19 +20,33 @@ import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { SignInContext } from "../contexts/SignInContext";
+import axios from "axios";
+import { ProductContext } from "../contexts/ProductContext";
 
 const PRIMARY_COLOR = "#ab39c6";
 const CURRENT_HEIGHT = Dimensions.get("window").height;
+
+const axiosInstance = axios.create({
+	baseURL: process.env.EXPO_PUBLIC_API_URL,
+});
+
+const formatPrice = (value) => {
+	return new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "PHP",
+	}).format(value);
+};
 
 const Product = ({ product, price, description }) => {
 	return (
 		<View style={styles.product}>
 			<Text style={styles.productTitle}>{product}</Text>
-			<Text style={styles.productTitle}>{price}</Text>
+			<Text style={styles.productPrice}>{formatPrice(price)}</Text>
 			<Text style={styles.productDescription}>{description}</Text>
 		</View>
 	);
 };
+
 const Products = () => {
 	const {
 		control,
@@ -55,25 +70,30 @@ const Products = () => {
 	});
 
 	const { dispatch } = useContext(SignInContext);
+	const { state: productsState, dispatch: productsDispatch } =
+		useContext(ProductContext);
+	const [isFetching, setFetching] = useState(true);
 
-	const [products, setProducts] = useState([
-		{
-			product: "Red Horse (Big)",
-			description:
-				"A questions about marvel superheroes. This includes the power, the origin, and the land of the heroes",
-			price: 130,
-		},
-		{
-			product: "Red Horse (Small)",
-			description: "A questions about marvel superheroes",
-			price: 130,
-		},
-	]);
 	const [modalVisible, setModalVisible] = useState(false);
 
 	const navigation = useNavigation();
 
-	const onSubmit = async (data) => {};
+	const onSubmit = async (data) => {
+		axiosInstance
+			.post("/api/v1/products", { ...data })
+			.then(async (_response) => {
+				const getProductsRes = await axiosInstance.get("/api/v1/products");
+
+				resetField("name");
+				resetField("price");
+				resetField("description");
+				setModalVisible(false);
+				productsDispatch({
+					type: "NEW_PRODUCT",
+					payload: { products: getProductsRes.data.data },
+				});
+			});
+	};
 
 	useEffect(() => {
 		navigation.setOptions({
@@ -118,21 +138,42 @@ const Products = () => {
 		});
 	}, [navigation]);
 
+	useEffect(() => {
+		axiosInstance.get("/api/v1/products").then((response) => {
+			productsDispatch({
+				type: "NEW_PRODUCT",
+				payload: { products: response.data.data },
+			});
+			setFetching(false);
+		});
+	}, []);
+
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.flashcards}>
+			<SafeAreaView style={styles.productsMain}>
 				<TextInput style={styles.searchBar} placeholder="Search..." />
-				<FlatList
-					data={products}
-					renderItem={(product) => (
-						<Product
-							product={product.item.product}
-							price={product.item.price}
-							description={product.item.description}
-						/>
-					)}
-					contentContainerStyle={{ paddingBottom: 20 }}
-				/>
+				{isFetching ? (
+					<View style={styles.noProducts}>
+						<Text style={styles.noProductsText}>Loading...</Text>
+					</View>
+				) : productsState.products.length ? (
+					<FlatList
+						data={productsState.products}
+						renderItem={(product) => (
+							<Product
+								product={product.item.name}
+								price={product.item.price}
+								description={product.item.description}
+							/>
+						)}
+						contentContainerStyle={{ paddingBottom: 20 }}
+						keyboardDismissMode="on-drag"
+					/>
+				) : (
+					<View style={styles.noProducts}>
+						<Text style={styles.noProductsText}>No Products</Text>
+					</View>
+				)}
 
 				<TouchableOpacity
 					style={styles.fixedButton}
@@ -278,9 +319,17 @@ const Products = () => {
 											style={styles.addCategoryButton}
 											onPress={handleSubmit(onSubmit)}
 										>
-											<View>
-												<Text style={styles.addCategoryButtonText}>Add</Text>
-											</View>
+											{isSubmitting ? (
+												<ActivityIndicator
+													style={styles.addCategoryButtonText}
+													size="small"
+													color="white"
+												/>
+											) : (
+												<View>
+													<Text style={styles.addCategoryButtonText}>Add</Text>
+												</View>
+											)}
 										</TouchableOpacity>
 									</ScrollView>
 								</View>
@@ -298,7 +347,7 @@ export default Products;
 const styles = StyleSheet.create({
 	modalBackdrop: {
 		flex: 1,
-		alignItems: "center",
+		alignItems: "stretch",
 		justifyContent: "flex-end",
 	},
 	modalContent: {
@@ -372,11 +421,12 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		fontFamily: "PoppinsRegular",
 	},
-	flashcards: {
+	productsMain: {
 		paddingHorizontal: 15,
 		paddingTop: 15,
 		flex: 1,
 		position: "relative",
+		backgroundColor: "white",
 	},
 	product: {
 		gap: 5,
@@ -386,8 +436,13 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	productTitle: {
-		fontFamily: "PoppinsBold",
+		fontFamily: "PoppinsMedium",
 		fontSize: 20,
+	},
+	productPrice: {
+		fontSize: 25,
+		fontFamily: "PoppinsBold",
+		color: "green",
 	},
 	productDescription: {
 		fontFamily: "PoppinsRegular",
@@ -407,5 +462,16 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.5,
 		shadowRadius: 2,
 		elevation: 5, // For Android shadow
+	},
+	noProducts: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	noProductsText: {
+		textAlign: "center",
+		fontFamily: "PoppinsBold",
+		fontSize: 32,
+		color: PRIMARY_COLOR,
 	},
 });
